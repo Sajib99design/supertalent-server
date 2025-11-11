@@ -132,7 +132,23 @@ async function run() {
             res.send(result);
         });
 
+        // filter my user login email
+        app.get('/myaddjobs', verifyFireToken, async (req, res) => {
+            const email = req.query.email;
+            // console.log(email);
 
+            const query = {};
+            if (email) {
+                if (email !== req.token_email) {
+                    return res.status(403).send({ message: 'forbidden access' });
+                }
+                query.userEmail = email;
+            }
+
+            const cursor = jobsCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
 
 
 
