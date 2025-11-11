@@ -234,7 +234,13 @@ async function run() {
 
 
 
-
+   // Mark task as done
+   app.patch("/acceptedTasks/done/:id", verifyFireToken, async (req, res) => {
+    const id = req.params.id;
+    const updateDoc = { $set: { status: "done" } };
+    const result = await acceptedTasksCollection.updateOne({ _id: new ObjectId(id) }, updateDoc);
+    res.send(result);
+});
 
 
 
