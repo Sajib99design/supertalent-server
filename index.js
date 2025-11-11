@@ -178,7 +178,16 @@ async function run() {
 
 
 
-
+    app.delete('/myaddjobs/:id', verifyFireToken, async (req, res) => {
+        const id = req.params.id;
+        try {
+            const query = { _id: new ObjectId(id) };
+            const result = await jobsCollection.deleteOne(query);
+            res.send(result);
+        } catch (e) {
+            return res.status(400).send({ message: "Invalid Post ID format" });
+        }
+    });
 
 
 
