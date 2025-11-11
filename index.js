@@ -190,7 +190,14 @@ async function run() {
     });
 
 
-
+   // new
+   app.get('/updatejob/:id', verifyFireToken, async (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+    const query = { _id: new ObjectId(id) }
+    const result = await jobsCollection.findOne(query)
+    res.send(result);
+});
 
 
 
