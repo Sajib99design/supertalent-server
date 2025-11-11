@@ -132,6 +132,9 @@ async function run() {
             res.send(result);
         });
 
+
+
+
         // filter my user login email
         app.get('/myaddjobs', verifyFireToken, async (req, res) => {
             const email = req.query.email;
@@ -151,53 +154,56 @@ async function run() {
         })
 
 
-     //  Update a job by ID
-     app.put('/myaddjobs/:id', verifyFireToken, async (req, res) => {
-        const id = req.params.id;
-        const updatedJob = req.body;
-        const email = req.query.email;
+        //  Update a job by ID
+        app.put('/myaddjobs/:id', verifyFireToken, async (req, res) => {
+            const id = req.params.id;
+            const updatedJob = req.body;
+            const email = req.query.email;
 
-        if (email !== req.token_email) {
-            return res.status(403).send({ message: 'forbidden access' });
-        }
-
-        const filter = { _id: new ObjectId(id) };
-        const updateDoc = {
-            $set: {
-                title: updatedJob.title,
-                summary: updatedJob.summary,
-                category: updatedJob.category,
-                coverImage: updatedJob.coverImage,
-                postedDate: new Date(),
+            if (email !== req.token_email) {
+                return res.status(403).send({ message: 'forbidden access' });
             }
-        };
 
-        const result = await jobsCollection.updateOne(filter, updateDoc);
-        res.send(result);
-    });
+            const filter = { _id: new ObjectId(id) };
+            const updateDoc = {
+                $set: {
+                    title: updatedJob.title,
+                    summary: updatedJob.summary,
+                    category: updatedJob.category,
+                    coverImage: updatedJob.coverImage,
+                    postedDate: new Date(),
+                }
+            };
 
-
-
-    app.delete('/myaddjobs/:id', verifyFireToken, async (req, res) => {
-        const id = req.params.id;
-        try {
-            const query = { _id: new ObjectId(id) };
-            const result = await jobsCollection.deleteOne(query);
+            const result = await jobsCollection.updateOne(filter, updateDoc);
             res.send(result);
-        } catch (e) {
-            return res.status(400).send({ message: "Invalid Post ID format" });
-        }
-    });
+        });
 
 
-   // new
-   app.get('/updatejob/:id', verifyFireToken, async (req, res) => {
-    const id = req.params.id;
-    console.log(id);
-    const query = { _id: new ObjectId(id) }
-    const result = await jobsCollection.findOne(query)
-    res.send(result);
-});
+
+        app.delete('/myaddjobs/:id', verifyFireToken, async (req, res) => {
+            const id = req.params.id;
+            try {
+                const query = { _id: new ObjectId(id) };
+                const result = await jobsCollection.deleteOne(query);
+                res.send(result);
+            } catch (e) {
+                return res.status(400).send({ message: "Invalid Post ID format" });
+            }
+        });
+
+
+
+
+
+        // new
+        app.get('/updatejob/:id', verifyFireToken, async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const query = { _id: new ObjectId(id) }
+            const result = await jobsCollection.findOne(query)
+            res.send(result);
+        });
 
 
 
@@ -224,36 +230,29 @@ async function run() {
 
 
 
-
-   //  Get all accepted tasks by user
-   app.get("/acceptedTasks/:email", verifyFireToken, async (req, res) => {
-    const email = req.params.email;
-    const result = await acceptedTasksCollection.find({ userEmail: email }).toArray();
-    res.send(result);
-});
-
-
-
-   // Mark task as done
-   app.patch("/acceptedTasks/done/:id", verifyFireToken, async (req, res) => {
-    const id = req.params.id;
-    const updateDoc = { $set: { status: "done" } };
-    const result = await acceptedTasksCollection.updateOne({ _id: new ObjectId(id) }, updateDoc);
-    res.send(result);
-});
+        //  Get all accepted tasks by user
+        app.get("/acceptedTasks/:email", verifyFireToken, async (req, res) => {
+            const email = req.params.email;
+            const result = await acceptedTasksCollection.find({ userEmail: email }).toArray();
+            res.send(result);
+        });
 
 
 
+        // Mark task as done
+        app.patch("/acceptedTasks/done/:id", verifyFireToken, async (req, res) => {
+            const id = req.params.id;
+            const updateDoc = { $set: { status: "done" } };
+            const result = await acceptedTasksCollection.updateOne({ _id: new ObjectId(id) }, updateDoc);
+            res.send(result);
+        });
 
-  //  Cancel accepted task
-  app.delete("/acceptedTasks/:id", verifyFireToken, async (req, res) => {
-    const id = req.params.id;
-    const result = await acceptedTasksCollection.deleteOne({ _id: new ObjectId(id) });
-    res.send(result);
-});
-
-
-
+        //  Cancel accept task
+        app.delete("/acceptedTasks/:id", verifyFireToken, async (req, res) => {
+            const id = req.params.id;
+            const result = await acceptedTasksCollection.deleteOne({ _id: new ObjectId(id) });
+            res.send(result);
+        });
 
 
 
