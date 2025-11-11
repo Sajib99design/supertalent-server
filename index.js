@@ -151,6 +151,55 @@ async function run() {
         })
 
 
+     //  Update a job by ID
+     app.put('/myaddjobs/:id', verifyFireToken, async (req, res) => {
+        const id = req.params.id;
+        const updatedJob = req.body;
+        const email = req.query.email;
+
+        if (email !== req.token_email) {
+            return res.status(403).send({ message: 'forbidden access' });
+        }
+
+        const filter = { _id: new ObjectId(id) };
+        const updateDoc = {
+            $set: {
+                title: updatedJob.title,
+                summary: updatedJob.summary,
+                category: updatedJob.category,
+                coverImage: updatedJob.coverImage,
+                postedDate: new Date(),
+            }
+        };
+
+        const result = await jobsCollection.updateOne(filter, updateDoc);
+        res.send(result);
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
