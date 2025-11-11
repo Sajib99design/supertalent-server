@@ -225,6 +225,12 @@ async function run() {
 
 
 
+   //  Get all accepted tasks by user
+   app.get("/acceptedTasks/:email", verifyFireToken, async (req, res) => {
+    const email = req.params.email;
+    const result = await acceptedTasksCollection.find({ userEmail: email }).toArray();
+    res.send(result);
+});
 
 
 
