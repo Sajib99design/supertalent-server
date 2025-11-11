@@ -202,6 +202,26 @@ async function run() {
 
 
 
+        //  Accept a job
+        app.post("/accepted-tasks", verifyFireToken, async (req, res) => {
+            const newTask = req.body;
+            const { jobId, userEmail } = newTask;
+
+
+            const existing = await acceptedTasksCollection.findOne({
+                jobId,
+                userEmail,
+            });
+
+            if (existing) {
+                return res.status(400).send({ message: "Already accepted!" });
+            }
+
+
+            const result = await acceptedTasksCollection.insertOne(newTask);
+            res.send(result);
+        });
+
 
 
 
