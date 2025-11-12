@@ -100,7 +100,7 @@ async function run() {
 
 
         app.get('/latestjobs', async (req, res) => {
-            const cursor = jobsCollection.find().sort({ _id: -1 }).limit(8)
+            const cursor = jobsCollection.find().sort({ _id: -1 }).limit(6)
             const result = await cursor.toArray();
             res.send(result);
         });
