@@ -9,7 +9,8 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 var admin = require("firebase-admin");
-var serviceAccount = require("./super-firebase-adminKey.json");
+const decoded = Buffer.from(process.env.FIREBASE_SERVICE_KEY, "base64").toString("utf8");
+const serviceAccount = JSON.parse(decoded);
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });
@@ -42,7 +43,6 @@ const verifyFireToken = async (req, res, next) => {
     try {
         const userInfo = await admin.auth().verifyIdToken(token);
         req.token_email = userInfo.email;
-        console.log(userInfo);
         next();
     }
     catch {
@@ -124,7 +124,7 @@ async function run() {
         });
 
 
-        app.get('/alljobs/:id', async (req, res) => {
+        app.get('/alljobs/:id',  verifyFireToken, async (req, res) => {
             const id = req.params.id;
             console.log(id);
             const query = { _id: new ObjectId(id) }
@@ -199,7 +199,6 @@ async function run() {
         // new
         app.get('/updatejob/:id', verifyFireToken, async (req, res) => {
             const id = req.params.id;
-            console.log(id);
             const query = { _id: new ObjectId(id) }
             const result = await jobsCollection.findOne(query)
             res.send(result);
@@ -256,11 +255,8 @@ async function run() {
 
 
 
-
-
-
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // await client.db("admin").command({ ping: 1 });
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
 
         //   await client.close();
