@@ -18,7 +18,7 @@ It connects talented professionals with employers by allowing users to **post, b
 
 
 # Clone Repository
-git clone  https://github.com/Sajib99design/supertalent-client.git
+git clone https://github.com/Sajib99design/supertalent-server.git
 
 
 
