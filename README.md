@@ -48,7 +48,7 @@ Built with Tailwind CSS and DaisyUI for a professional, fully responsive design.
 - View all jobs
 - Update or delete your own job posts
 
-**Job Application System:**
+**Job Application Systems:**
 - View detailed job information
 - Apply to jobs (cannot apply to your own jobs)
 
